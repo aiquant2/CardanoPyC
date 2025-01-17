@@ -1,0 +1,199 @@
+<idea-plugin>
+    <id>aiquant.plugins</id>
+    <name>CardanoPyC</name>
+    <vendor>AIQUANT TECHNOLOGIES</vendor>
+    <version>1.0.0</version>
+
+    <description>
+        CardanoPyC is a powerful IntelliJ-based plugin that provides seamless support for Haskell and Plutus development.
+        It is designed to enhance developer productivity by offering:
+
+        - Advanced syntax highlighting for Haskell and Plutus code.
+        - Intelligent code completion to speed up development.
+        - Integration with the Cardano API for real-time blockchain interaction.
+
+        This plugin is perfect for developers building on the Cardano blockchain, enabling smooth and efficient smart contract development within the IntelliJ ecosystem.
+    </description>
+    <idea-version since-build="233" until-build="244.*" />
+
+    <depends>com.intellij.modules.platform</depends>
+
+
+
+    <actions>
+        <action id="CreateHaskellFileAction"
+                class="org.intellij.sdk.language.actions.CreateHaskellFileAction"
+                text="Haskell File"
+                description="Creates a new Haskell file in the current directory"
+                icon="/icons/plugin-hs-Icon.svg">
+            <add-to-group group-id="NewGroup" anchor="first"/>
+        </action>
+
+
+        <group id="Haskell.CardanoAPI"
+               text="CardanoApi"
+               description="Cardano API Data"
+               popup="true">
+            <add-to-group group-id="RunMenu" anchor="last"/>
+
+            <action id="CardanoLatestBlockAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoLatestBlockAction"
+                    text="Latest Block Details"
+                    description="Fetch the latest block details from the Cardano Scan API"
+                    icon="/icons/cardano.svg"/>
+
+            <action id="CardanoNetworkStateAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoNetworkStateAction"
+                    text="Network Details"
+                    description="Fetch the network state from the Cardano Scan API"
+                    icon="/icons/cardano.svg"/>
+
+            <action id="CardanoProtocolParamsAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoProtocolParamsAction"
+                    text="Network Protocol Details"
+                    description="Fetch the protocol parameters from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+
+            <action id="CardanoGovernanceCommitteeAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoGovernanceCommitteeAction"
+                    text="Fetch Governance Committee"
+                    description="Fetch the governance committee data from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+
+            <action id="CardanoAddressBalanceAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoAddressBalanceAction"
+                    text="Address Balance"
+                    description="Fetch the address balance from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+
+            <action id="CardanoPoolInfoAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoPoolInfoAction"
+                    text="Pool Details"
+                    description="Fetch the pool details from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+
+            <action id="CardanoPoolStatusAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoPoolStatusAction"
+                    text="Pool Status"
+                    description="Fetch the pool status from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+
+            <action id="CardanoTransactionInfoAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoTransactionInfoAction"
+                    text="Transaction Details"
+                    description="Fetch the transaction details from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+
+            <action id="CardanoRewardAccountInfoAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoRewardAccountInfoAction"
+                    text="StakeKey Details"
+                    description="Fetch the stake key details from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+
+            <action id="CardanoGovernanceHotHexKeyAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoGovernanceHotHexKeyAction"
+                    text="CCHot Details"
+                    description="Fetch the CCHot details from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+
+            <action id="CardanoGovernanceColdKeyAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoGovernanceColdKeyAction"
+                    text="CCMember Details"
+                    description="Fetch the CCMember details from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+
+            <action id="CardanoGovernanceDRepAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoGovernanceDRepAction"
+                    text="DRep Information"
+                    description="Fetch the dRep information from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+
+            <action id="CardanoGovernanceActionDetailsAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoGovernanceActionDetailsAction"
+                    text="Governance Action"
+                    description="Fetch the governance action from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+            <action id="test"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoBlockDetailsAction"
+                    text="Block Details"
+                    description="Fetch the governance action from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+            <action id="CardanoPoolListAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoPoolListAction"
+                    text="Pool List"
+                    description="Fetch the pool list action from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+            <action id="CardanoExpiringPoolList"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoExpiringPoolListAction"
+                    text=" Expiring Pool List"
+                    description="Fetch the  expire pool list action from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+            <action id="CardanoExpiredPoolList"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoExpiredPoolListAction"
+                    text=" Expired  Pool List"
+                    description="Fetch the  expired pool list action from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+            <action id="CardanoAssetDetailsAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoAssetDetailsAction"
+                    text="Asset Details"
+                    description="Fetch the asset details action from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+            <action id="CardanoPolicyDetailsAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoPolicyDetailsAction"
+                    text="Policy Details By PolicyId"
+                    description="Fetch the policy details action from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+            <action id="CardanoAssetByAddressAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoAssetByAddressAction"
+                    text="Asset Details By Address"
+                    description="Fetch the asset details by address action from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+            <action id="CardanoDRepListAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoDRepListAction"
+                    text="DRep List"
+                    description="Fetch the DRep list action from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+            <action id="CardanoTransactionListByAddressAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoTransactionListByAddressAction"
+                    text="Transaction List By Address "
+                    description="Fetch the transaction list by address action from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+            <action id="CardanoAddressAssociatedWithAStakeKey"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoAddressAssociatedWithAStakeKey"
+                    text="Address Associated With A Stake Key"
+                    description="Fetch the address address associated with a stake key action from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+            <action id="CardanoCommitteeMemberAction"
+                    class="org.intellij.sdk.language.cardanoApi.actions.CardanoCommitteeMemberAction"
+                    text="Committee Member"
+                    description="Fetch the address address associated with a stake key action from the Cardano network."
+                    icon="/icons/cardano.svg"/>
+
+        </group>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType
+                name="Haskell File"
+                implementationClass="org.intellij.sdk.language.HaskellFileType"
+                fieldName="INSTANCE"
+                language="Haskell"
+                extensions="hs"/>
+
+        <lang.parserDefinition
+                language="Haskell"
+                implementationClass="org.intellij.sdk.language.HaskellParserDefinition"/>
+
+        <lang.syntaxHighlighterFactory
+                language="Haskell"
+                implementationClass="org.intellij.sdk.language.highlighter.HaskellSyntaxHighlighterFactory"/>
+
+        <colorSettingsPage
+                implementation="org.intellij.sdk.language.highlighter.HaskellColorSettingsPage"/>
+
+        <completion.contributor
+                language="Haskell"
+                implementationClass="org.intellij.sdk.language.HaskellCompletionContributor"/>
+    </extensions>
+
+</idea-plugin>
