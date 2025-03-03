@@ -2,18 +2,8 @@
     <id>aiquant.plugins</id>
     <name>CardanoPyC</name>
     <vendor>AIQUANT TECHNOLOGIES</vendor>
-    <version>1.0.0</version>
 
-    <description>
-        CardanoPyC is a powerful IntelliJ-based plugin that provides seamless support for Haskell and Plutus development.
-        It is designed to enhance developer productivity by offering:
 
-        - Advanced syntax highlighting for Haskell and Plutus code.
-        - Intelligent code completion to speed up development.
-        - Integration with the Cardano API for real-time blockchain interaction.
-
-        This plugin is perfect for developers building on the Cardano blockchain, enabling smooth and efficient smart contract development within the IntelliJ ecosystem.
-    </description>
     <idea-version since-build="233" until-build="244.*" />
 
     <depends>com.intellij.modules.platform</depends>
@@ -170,6 +160,17 @@
                     icon="/icons/cardano.svg"/>
 
         </group>
+        <group id="Haskell.CardanoNode"
+               text="CardanoNode"
+               description="Cardano cli"
+               popup="true">
+            <add-to-group group-id="RunMenu" anchor="last"/>
+            <action id="CardanoCli" class="org.intellij.sdk.language.deployment.CardanoCliAction" text="CardanoCli" description="CardanoCli"/>
+            <action id="CardanoNode" class="org.intellij.sdk.language.deployment.RunCardanoNodeAction" text="CardanoNode" description="CardanoNode"/>
+        </group>
+        <action id="wallet" class="org.intellij.sdk.language.wallet.WalletManagementAction" text="Wallet" description="Wallet management">
+            <add-to-group group-id="RunMenu" anchor="last"/>
+        </action>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
