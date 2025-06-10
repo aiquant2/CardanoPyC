@@ -11,6 +11,7 @@
 > [!NOTE]
 > Click the <kbd>Use this template</kbd> button and clone it in IntelliJ IDEA.
 
+<!-- Plugin description -->
 
 CardanoPyC is a powerful IntelliJ-based plugin that provides seamless support for Haskell and Plutus development.
 It is designed to enhance developer productivity by offering:

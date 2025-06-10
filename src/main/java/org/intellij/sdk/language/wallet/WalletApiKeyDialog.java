@@ -48,6 +48,7 @@ public class WalletApiKeyDialog extends DialogWrapper {
 
         close(OK_EXIT_CODE);
         super.doOKAction();
+
     }
 
     @Override

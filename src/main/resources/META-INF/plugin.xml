@@ -160,6 +160,7 @@
                     icon="/icons/cardano.svg"/>
 
         </group>
+
         <group id="Haskell.CardanoNode"
                text="CardanoNode"
                description="Cardano cli"

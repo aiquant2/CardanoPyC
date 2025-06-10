@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.jar.JarOutputStream;
 
 public class ViewBalanceDialog extends DialogWrapper {
     private static final String netType=WalletApiKeyState.getInstance().getNetwork();
@@ -26,7 +27,9 @@ public class ViewBalanceDialog extends DialogWrapper {
         case "preprod" -> "preprod";
         default -> "preview";
     };
-    private static final String BLOCKFROST_API_URL = "https://cardano-"+state+".blockfrost.io/api";
+
+    private static final String BLOCKFROST_API_URL = "https://cardano-" + state + ".blockfrost.io/api/v0";
+
     private static final String API_KEY = WalletApiKeyState.getInstance().getApiKey();
 
 
@@ -37,6 +40,7 @@ public class ViewBalanceDialog extends DialogWrapper {
         super(true);
         setTitle("Wallet Balance and Transactions");
         init();
+
     }
 
     @Override
@@ -46,6 +50,7 @@ public class ViewBalanceDialog extends DialogWrapper {
 
         balanceLabel = new JLabel("<html><h2>Your Balance:</h2><br><b>Fetching balance...</b></html>", JLabel.CENTER);
         panel.add(balanceLabel, BorderLayout.NORTH);
+
 
         transactionsArea = new JTextArea(12, 40);
         transactionsArea.setEditable(false);
@@ -57,6 +62,7 @@ public class ViewBalanceDialog extends DialogWrapper {
         new Thread(() -> {
             try {
                 String address = SecureStorageUtil.retrieveCredential("wallet_baseAddress");
+
                 String balance = fetchWalletBalance(address);
                 List<String> transactions = fetchTransactionHistory(address);
 

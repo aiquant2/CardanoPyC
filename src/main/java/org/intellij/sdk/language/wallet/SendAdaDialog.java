@@ -72,7 +72,9 @@ public class SendAdaDialog extends DialogWrapper {
     }
     private void transfer(String recipientAddress, double amount) throws Exception {
         String senderMnemonic =  SecureStorageUtil.retrieveCredential("wallet_mnemonic");
+        System.out.println(senderMnemonic);
         String network = WalletApiKeyState.getInstance().getNetwork();
+        System.out.println(network);
         Account sender;
         switch (network) {
             case "preprod" -> sender=new Account(Networks.preprod(), senderMnemonic);
@@ -106,6 +108,7 @@ public class SendAdaDialog extends DialogWrapper {
     private static @NotNull BackendService getBackendService() {
         String bf_projectId = WalletApiKeyState.getInstance().getApiKey();
         String network = WalletApiKeyState.getInstance().getNetwork();
+        System.out.println(network);
         String state = switch (network) {
             case "preview" -> Constants.BLOCKFROST_PREVIEW_URL;
             case "preprod" -> Constants.BLOCKFROST_PREPROD_URL;

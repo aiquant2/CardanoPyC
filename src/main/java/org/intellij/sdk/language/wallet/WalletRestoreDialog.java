@@ -89,13 +89,15 @@ public class WalletRestoreDialog extends DialogWrapper {
             case "preview" -> new Account(Networks.preview(), seedPhrase);
             default -> new Account(Networks.mainnet(), seedPhrase);
         };
-
+       
         String restoredAddress = account.baseAddress();
 
         
         SecureStorageUtil.storeCredential("wallet_username", username);
         SecureStorageUtil.storeCredential("wallet_password", password);
         SecureStorageUtil.storeCredential("wallet_baseAddress", restoredAddress);
+        SecureStorageUtil.storeCredential("wallet_mnemonic",seedPhrase);
+
 
         JOptionPane.showMessageDialog(null, "Wallet Restored Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
