@@ -175,6 +175,10 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
+
+        <statusBarWidgetFactory
+                implementation="org.intellij.sdk.language.wallet.NetworkStatusWidgetFactory"/>
+
         <fileType
                 name="Haskell File"
                 implementationClass="org.intellij.sdk.language.HaskellFileType"

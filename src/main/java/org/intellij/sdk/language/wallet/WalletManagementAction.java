@@ -1,14 +1,23 @@
+
+
 package org.intellij.sdk.language.wallet;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.StatusBar;
+import com.intellij.openapi.wm.WindowManager;
 import org.jetbrains.annotations.NotNull;
 
 public class WalletManagementAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        String apiKey = WalletApiKeyState.getInstance().getApiKey();
+        Project project = e.getProject();
+        if (project == null) return;
+
+        String apiKey = SecureStorageUtil.retrieveCredential("wallet_apikey");
         String storedMnemonic = SecureStorageUtil.retrieveCredential("wallet_mnemonic");
+
         if (apiKey == null || apiKey.isEmpty()) {
             WalletApiKeyDialog apiKeyDialog = new WalletApiKeyDialog();
             apiKeyDialog.show();
@@ -16,9 +25,25 @@ public class WalletManagementAction extends AnAction {
                 return;
             }
         }
-        if (storedMnemonic != null) {
+
+        if (apiKey != null) {
+            // Show wallet login dialog
             WalletLoginDialog walletLoginDialog = new WalletLoginDialog();
             walletLoginDialog.show();
+
+            String selectedNetwork= SecureStorageUtil.retrieveCredential("wallet_network");
+            // Example: assume you pick the network inside walletLoginDialog (e.g., from a dropdown)
+            // You should replace this with actual selection logic
+
+            // Save the selected network
+            WalletApiKeyState.getInstance().setNetwork(selectedNetwork);
+
+            // Refresh the status bar widget
+            StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
+            if (statusBar != null) {
+                statusBar.updateWidget("CardanoNetworkStatus");
+            }
+
         } else {
             WalletOptionsDialog walletOptionsDialog = new WalletOptionsDialog();
             walletOptionsDialog.show();
