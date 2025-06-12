@@ -29,7 +29,7 @@ public class ViewSpecificBalanceDialog extends DialogWrapper {
     };
     private static final String BLOCKFROST_API_URL = "https://cardano-" + STATE + ".blockfrost.io/api/v0";
     private static final String API_KEY = WalletApiKeyState.getInstance().getApiKey();
-    private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private  final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     static {
