@@ -34,6 +34,7 @@ public class WalletApiKeyState {
     }
 
     public String getNetwork() {
+        this.network=SecureStorageUtil.retrieveCredential("wallet_network");
         return network;
     }
 
@@ -43,7 +44,9 @@ public class WalletApiKeyState {
     }
 
     public String getApiKey() {
-        return apiKey;
+        this.apiKey=SecureStorageUtil.retrieveCredential("wallet_apikey");
+
+        return this.apiKey;
     }
 
     private void updateStatusBar() {

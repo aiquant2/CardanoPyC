@@ -36,10 +36,11 @@ public class WalletOptionsDialog extends DialogWrapper {
 
         JButton createWalletButton = createStyledButton("Create Wallet");
         JButton restoreWalletButton = createStyledButton("Restore Wallet");
+        JButton ViewBalanceButton = createStyledButton("View Balance");
 
         createWalletButton.addActionListener(e -> onCreateWallet());
         restoreWalletButton.addActionListener(e -> onRestoreWallet());
-
+        ViewBalanceButton.addActionListener(e -> onViewBalance());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = GridBagConstraints.RELATIVE;
@@ -48,12 +49,15 @@ public class WalletOptionsDialog extends DialogWrapper {
 
         buttonPanel.add(createWalletButton, gbc);
         buttonPanel.add(restoreWalletButton,gbc);
+        buttonPanel.add(ViewBalanceButton,gbc);
 
         panel.add(buttonPanel);
 
 
         return panel;
     }
+
+
 
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
@@ -101,5 +105,10 @@ public class WalletOptionsDialog extends DialogWrapper {
         WalletRestoreDialog restoreDialog = new WalletRestoreDialog();
         restoreDialog.show();
 
+    }
+    private void onViewBalance() {
+        close(OK_EXIT_CODE);
+        ViewBalanceDialog viewDialog = new ViewBalanceDialog();
+        viewDialog.show();
     }
 }
