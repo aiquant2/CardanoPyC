@@ -44,12 +44,12 @@ public class WalletActionsDialog extends DialogWrapper {
 
         JButton sendButton = createStyledButton("Send ADA");
         JButton receiveButton = createStyledButton("Receive ADA");
-//        JButton balanceButton = createStyledButton("View Balance");
+        JButton balanceButton = createStyledButton("View Balance");
         JButton logoutButton = createStyledButton("Logout");
 
         sendButton.addActionListener(e -> onSend());
         receiveButton.addActionListener(e -> onReceive());
-//        balanceButton.addActionListener(e -> onViewBalance());
+        balanceButton.addActionListener(e -> onViewBalance());
         logoutButton.addActionListener(e -> onLogout());
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -60,7 +60,7 @@ public class WalletActionsDialog extends DialogWrapper {
 
         buttonPanel.add(sendButton, gbc);
         buttonPanel.add(receiveButton, gbc);
-//        buttonPanel.add(balanceButton, gbc);
+        buttonPanel.add(balanceButton, gbc);
         buttonPanel.add(logoutButton, gbc);
 
         panel.add(userLabel);
@@ -126,7 +126,7 @@ public class WalletActionsDialog extends DialogWrapper {
                   }
 
             private void onViewBalance() {
-                new ViewBalanceDialog().show();
+                new ViewSpecificBalanceDialog().show();
             }
 
             private void onLogout() {

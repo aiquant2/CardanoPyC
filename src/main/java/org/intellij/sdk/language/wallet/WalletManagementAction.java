@@ -32,10 +32,7 @@ public class WalletManagementAction extends AnAction {
             walletLoginDialog.show();
 
             String selectedNetwork= SecureStorageUtil.retrieveCredential("wallet_network");
-            // Example: assume you pick the network inside walletLoginDialog (e.g., from a dropdown)
-            // You should replace this with actual selection logic
 
-            // Save the selected network
             WalletApiKeyState.getInstance().setNetwork(selectedNetwork);
 
             // Refresh the status bar widget

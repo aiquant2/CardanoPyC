@@ -35,7 +35,7 @@ public class WalletApiKeyState {
 
     public String getNetwork() {
         this.network=SecureStorageUtil.retrieveCredential("wallet_network");
-        return network;
+        return this.network;
     }
 
     public void setApiKey(String apiKey) {
