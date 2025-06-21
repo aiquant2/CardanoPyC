@@ -9,7 +9,11 @@ plugins {
     alias(libs.plugins.changelog) // Gradle Changelog Plugin
     alias(libs.plugins.qodana) // Gradle Qodana Plugin
     alias(libs.plugins.kover) // Gradle Kover Plugin
+
+
 }
+
+
 
 group = providers.gradleProperty("pluginGroup").get()
 version = providers.gradleProperty("pluginVersion").get()
@@ -19,10 +23,12 @@ sourceSets {
         java.srcDirs("src/main/gen")
     }
 }
+
+
 // Set the JVM language level used to build the project.
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
@@ -145,6 +151,11 @@ tasks {
     }
 }
 
+
+
+
+
+
 intellijPlatformTesting {
     runIde {
         register("runIdeForUiTests") {
@@ -165,3 +176,4 @@ intellijPlatformTesting {
         }
     }
 }
+

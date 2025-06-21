@@ -2,7 +2,11 @@
 package org.intellij.sdk.language.psi.impl;
 
 import java.util.List;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;

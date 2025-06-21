@@ -2,7 +2,8 @@
 package org.intellij.sdk.language.psi;
 
 import java.util.List;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Nullable;
+
 import com.intellij.psi.PsiElement;
 
 public interface HaskellListType extends PsiElement {

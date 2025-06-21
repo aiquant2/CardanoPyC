@@ -1,7 +1,11 @@
 // This is a generated file. Not intended for manual editing.
 package org.intellij.sdk.language.psi;
 
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
+
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
 

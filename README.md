@@ -12,7 +12,6 @@
 > Click the <kbd>Use this template</kbd> button and clone it in IntelliJ IDEA.
 
 <!-- Plugin description -->
-
 CardanoPyC is a powerful IntelliJ-based plugin that provides seamless support for Haskell and Plutus development.
 It is designed to enhance developer productivity by offering:
 - Advanced syntax highlighting for Haskell and Plutus code.
@@ -37,20 +36,20 @@ In this README, we will highlight the following elements of template-project cre
 - [Plugin template structure](#plugin-template-structure)
 - [Plugin configuration file](#plugin-configuration-file)
 - [Sample code](#sample-code):
-    - listeners – project lifecycle listener
-    - services – project and application-level services
+  - listeners – project lifecycle listener
+  - services – project and application-level services
 - [Testing](#testing)
-    - [Functional tests](#functional-tests)
-    - [Code coverage](#code-coverage)
-    - [UI tests](#ui-tests)
+  - [Functional tests](#functional-tests)
+  - [Code coverage](#code-coverage)
+  - [UI tests](#ui-tests)
 - [Qodana integration](#qodana-integration)
 - [Predefined Run/Debug configurations](#predefined-rundebug-configurations)
 - [Continuous integration](#continuous-integration) based on GitHub Actions
-    - [Dependencies management](#dependencies-management) with Dependabot
-    - [Changelog maintenance](#changelog-maintenance) with the Gradle Changelog Plugin
-    - [Release flow](#release-flow) using GitHub Releases
-    - [Plugin signing](#plugin-signing) with your private certificate
-    - [Publishing the plugin](#publishing-the-plugin) with the IntelliJ Platform Gradle Plugin
+  - [Dependencies management](#dependencies-management) with Dependabot
+  - [Changelog maintenance](#changelog-maintenance) with the Gradle Changelog Plugin
+  - [Release flow](#release-flow) using GitHub Releases
+  - [Plugin signing](#plugin-signing) with your private certificate
+  - [Publishing the plugin](#publishing-the-plugin) with the IntelliJ Platform Gradle Plugin
 - [FAQ](#faq)
 - [Useful links](#useful-links)
 
@@ -201,11 +200,11 @@ It provides general information about the plugin, its dependencies, extensions, 
   <id>org.jetbrains.plugins.template</id>
   <name>Template</name>
   <vendor>JetBrains</vendor>
-  
+
   <depends>com.intellij.modules.platform</depends>
 
   <resource-bundle>messages.MyBundle</resource-bundle>
-  
+
   <extensions defaultExtensionNs="com.intellij">
     <toolWindow factoryClass="..." id="..."/>
   </extensions>
@@ -350,28 +349,28 @@ Thanks to such automation, you can delegate the testing and verification phases 
 In the `.github/workflows` directory, you can find definitions for the following GitHub Actions workflows:
 
 - [Build](.github/workflows/build.yml)
-    - Triggered on `push` and `pull_request` events.
-    - Runs the *Gradle Wrapper Validation Action* to verify the wrapper's checksum.
-    - Runs the `verifyPlugin` and `test` Gradle tasks.
-    - Builds the plugin with the `buildPlugin` Gradle task and provides the artifact for the next jobs in the workflow.
-    - Verifies the plugin using the *IntelliJ Plugin Verifier* tool.
-    - Prepares a draft release of the GitHub Releases page for manual verification.
+  - Triggered on `push` and `pull_request` events.
+  - Runs the *Gradle Wrapper Validation Action* to verify the wrapper's checksum.
+  - Runs the `verifyPlugin` and `test` Gradle tasks.
+  - Builds the plugin with the `buildPlugin` Gradle task and provides the artifact for the next jobs in the workflow.
+  - Verifies the plugin using the *IntelliJ Plugin Verifier* tool.
+  - Prepares a draft release of the GitHub Releases page for manual verification.
 - [Release](.github/workflows/release.yml)
-    - Triggered on `released` event.
-    - Updates `CHANGELOG.md` file with the content provided with the release note.
-    - Signs the plugin with a provided certificate before publishing.
-    - Publishes the plugin to JetBrains Marketplace using the provided `PUBLISH_TOKEN`.
-    - Sets publish channel depending on the plugin version, i.e. `1.0.0-beta` -> `beta` channel.
-    - Patches the Changelog and commits.
+  - Triggered on `released` event.
+  - Updates `CHANGELOG.md` file with the content provided with the release note.
+  - Signs the plugin with a provided certificate before publishing.
+  - Publishes the plugin to JetBrains Marketplace using the provided `PUBLISH_TOKEN`.
+  - Sets publish channel depending on the plugin version, i.e. `1.0.0-beta` -> `beta` channel.
+  - Patches the Changelog and commits.
 - [Run UI Tests](.github/workflows/run-ui-tests.yml)
-    - Triggered manually.
-    - Runs for macOS, Windows, and Linux separately.
-    - Runs `runIdeForUiTests` and `test` Gradle tasks.
+  - Triggered manually.
+  - Runs for macOS, Windows, and Linux separately.
+  - Runs `runIdeForUiTests` and `test` Gradle tasks.
 - [Template Cleanup](.github/workflows/template-cleanup.yml)
-    - Triggered once on the `push` event when a new template-based repository has been created.
-    - Overrides the scaffold with files from the `.github/template-cleanup` directory.
-    - Overrides JetBrains-specific sentences or package names with ones specific to the target repository.
-    - Removes redundant files.
+  - Triggered once on the `push` event when a new template-based repository has been created.
+  - Overrides the scaffold with files from the `.github/template-cleanup` directory.
+  - Overrides JetBrains-specific sentences or package names with ones specific to the target repository.
+  - Removes redundant files.
 
 All the workflow files have accurate documentation, so it's a good idea to take a look through their sources.
 

@@ -4,7 +4,7 @@
     <vendor>AIQUANT TECHNOLOGIES</vendor>
 
 
-    <idea-version since-build="233" until-build="244.*" />
+    <idea-version since-build="231" until-build="251.*" />
 
     <depends>com.intellij.modules.platform</depends>
 
@@ -169,14 +169,43 @@
             <action id="CardanoCli" class="org.intellij.sdk.language.deployment.CardanoCliAction" text="CardanoCli" description="CardanoCli"/>
             <action id="CardanoNode" class="org.intellij.sdk.language.deployment.RunCardanoNodeAction" text="CardanoNode" description="CardanoNode"/>
         </group>
+
+
+  
         <action id="wallet" class="org.intellij.sdk.language.wallet.WalletManagementAction" text="Wallet" description="Wallet management">
             <add-to-group group-id="RunMenu" anchor="last"/>
         </action>
+
+<!--            <action id="GenerateAddressAction"-->
+<!--                    class="org.intellij.sdk.language.actions.GenerateAddressAction"-->
+<!--                    text="Generate Plutus Address"-->
+<!--                    description="Run JavaScript to generate Cardano address" />-->
+
+            <!-- Add your action to both the Tools menu and context menus -->
+        <action id="GeneratePlutusAddress"
+                class="org.intellij.sdk.language.actions.GenerateAddressAction"
+                text="Generate Plutus Address"
+                description="Generate address from Plutus script">
+
+            <!-- Optional keyboard shortcut -->
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt G" />
+
+            <!-- Add to Tools menu -->
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+
+            <!-- Add to editor context menu -->
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
 
+<!--        <statusBarWidgetFactory-->
+<!--                implementation="org.intellij.sdk.language.wallet.NetworkStatusWidgetFactory"/>-->
+
         <statusBarWidgetFactory
+                id="CardanoNetworkStatus"
                 implementation="org.intellij.sdk.language.wallet.NetworkStatusWidgetFactory"/>
 
         <fileType
@@ -200,6 +229,7 @@
         <completion.contributor
                 language="Haskell"
                 implementationClass="org.intellij.sdk.language.HaskellCompletionContributor"/>
+        
     </extensions>
 
 </idea-plugin>

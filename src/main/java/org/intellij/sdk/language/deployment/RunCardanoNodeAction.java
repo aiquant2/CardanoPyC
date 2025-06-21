@@ -1,3 +1,4 @@
+
 package org.intellij.sdk.language.deployment;
 
 import com.intellij.execution.ExecutionException;
@@ -20,17 +21,22 @@ import com.intellij.ui.components.JBTextField;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RunCardanoNodeAction extends AnAction implements Disposable {
-    public OSProcessHandler processHandler;
-    public BufferedWriter processInput;
-     private static final Logger LOGGER = Logger.getLogger(RunCardanoNodeAction.class.getName());
+
+    private OSProcessHandler processHandler;
+    private BufferedWriter processInput;
+    private JLabel statusLabel;
+    private JButton stopButton;
+
+    private static final Logger LOGGER = Logger.getLogger(RunCardanoNodeAction.class.getName());
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
@@ -41,7 +47,7 @@ public class RunCardanoNodeAction extends AnAction implements Disposable {
         JBTextField topologyPathField = new JBTextField();
         JBTextField databasePathField = new JBTextField();
         JBTextField socketPathField = new JBTextField();
-        JBTextField portField = new JBTextField("3001"); // Default port
+        JBTextField portField = new JBTextField("3001");
         JBTextField configPathField = new JBTextField();
 
         panel.add(new JLabel("Topology File Path:"));
@@ -55,7 +61,8 @@ public class RunCardanoNodeAction extends AnAction implements Disposable {
         panel.add(new JLabel("Config File Path:"));
         panel.add(configPathField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Cardano Node Configuration", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int result = JOptionPane.showConfirmDialog(null, panel, "Cardano Node Configuration",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result != JOptionPane.OK_OPTION) {
             return;
         }
@@ -66,31 +73,33 @@ public class RunCardanoNodeAction extends AnAction implements Disposable {
         String port = portField.getText().trim();
         String configPath = configPathField.getText().trim();
 
-        if (topologyPath.isEmpty() || databasePath.isEmpty() || socketPath.isEmpty() || port.isEmpty() || configPath.isEmpty()) {
+        if (topologyPath.isEmpty() || databasePath.isEmpty() || socketPath.isEmpty()
+                || port.isEmpty() || configPath.isEmpty()) {
             Messages.showErrorDialog("All fields are required.", "Error");
             return;
         }
 
-     ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Cardano Node Terminal");
-     if (toolWindow == null) {
-         toolWindow = ToolWindowManager.getInstance(project).registerToolWindow(
-                 new RegisterToolWindowTask(
-                         "Cardano Node Terminal",
-                         ToolWindowAnchor.BOTTOM,
-                         null,
-                         false,
-                         true,
-                         true,
-                         true,
-                         null,
-                         null,
-                         null
-                 )
-         );
-     }
+        ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Cardano Node Terminal");
+
+        if (toolWindow == null) {
+            toolWindow = ToolWindowManager.getInstance(project).registerToolWindow(
+                    new RegisterToolWindowTask(
+                            "Cardano Node Terminal",
+                            ToolWindowAnchor.BOTTOM,
+                            null,
+                            false,
+                            true,
+                            true,
+                            true,
+                            null,
+                            null,
+                            null
+                    )
+            );
+        }
+
         ToolWindow finalToolWindow = toolWindow;
 
-        // Run the command in a background thread
         ApplicationManager.getApplication().executeOnPooledThread(() -> {
             GeneralCommandLine commandLine = new GeneralCommandLine("cardano-node", "run",
                     "--topology", topologyPath,
@@ -117,9 +126,21 @@ public class RunCardanoNodeAction extends AnAction implements Disposable {
 
                     consoleView.clear();
                     consoleView.attachToProcess(processHandler);
+                    statusLabel.setText("Status: Running");
+                    stopButton.setEnabled(true);
                 });
 
                 processHandler.startNotify();
+
+                processHandler.addProcessListener(new com.intellij.execution.process.ProcessAdapter() {
+                    @Override
+                    public void processTerminated(@NotNull com.intellij.execution.process.ProcessEvent event) {
+                        ApplicationManager.getApplication().invokeLater(() -> {
+                            statusLabel.setText("Status: Stopped");
+                            stopButton.setEnabled(false);
+                        });
+                    }
+                });
 
             } catch (ExecutionException ex) {
                 ApplicationManager.getApplication().invokeLater(() ->
@@ -131,7 +152,28 @@ public class RunCardanoNodeAction extends AnAction implements Disposable {
     public JBPanel<?> createTerminalPanel(ConsoleView consoleView) {
         JBPanel<?> terminalPanel = new JBPanel<>(new BorderLayout());
         terminalPanel.add(consoleView.getComponent(), BorderLayout.CENTER);
+
+        // Bottom control panel
+        JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        statusLabel = new JLabel("Status: Not Running");
+        stopButton = new JButton("Stop Node");
+
+        stopButton.setEnabled(false);
+        stopButton.addActionListener(e -> stopNode());
+
+        controlPanel.add(statusLabel);
+        controlPanel.add(stopButton);
+
+        terminalPanel.add(controlPanel, BorderLayout.SOUTH);
         return terminalPanel;
+    }
+
+    private void stopNode() {
+        if (processHandler != null && !processHandler.isProcessTerminated()) {
+            processHandler.destroyProcess();
+            statusLabel.setText("Status: Stopping...");
+            stopButton.setEnabled(false);
+        }
     }
 
     @Override
@@ -143,8 +185,6 @@ public class RunCardanoNodeAction extends AnAction implements Disposable {
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error closing process input", ex);
         }
-        if (processHandler != null && !processHandler.isProcessTerminated()) {
-            processHandler.destroyProcess();
-        }
+        stopNode();
     }
 }
