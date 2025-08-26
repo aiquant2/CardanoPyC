@@ -27,9 +27,15 @@ public class WalletManagementAction extends AnAction {
         }
 
         if (apiKey != null) {
-            // Show wallet login dialog
-            WalletLoginDialog walletLoginDialog = new WalletLoginDialog();
-            walletLoginDialog.show();
+//            // Show wallet login dialog
+//            WalletLoginDialog walletLoginDialog = new WalletLoginDialog();
+//            walletLoginDialog.show();
+
+
+            // Open the WalletOptionsDialog directly
+            WalletOptionsDialog dialog = new WalletOptionsDialog();
+            dialog.show();
+
 
             String selectedNetwork= SecureStorageUtil.retrieveCredential("wallet_network");
 
@@ -47,3 +53,5 @@ public class WalletManagementAction extends AnAction {
         }
     }
 }
+
+

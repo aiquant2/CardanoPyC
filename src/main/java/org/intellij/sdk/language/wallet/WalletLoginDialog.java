@@ -1,72 +1,91 @@
+
+
 package org.intellij.sdk.language.wallet;
 
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.ui.JBColor;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class WalletLoginDialog extends DialogWrapper {
+
+    private JTextField usernameField;
     private JPasswordField passwordField;
+    private JButton loginButton;
 
     public WalletLoginDialog() {
-        super(true); // Modal dialog
+        super(true);
+        setTitle("Login to Existing Wallet");
         init();
     }
 
     @Override
     protected @Nullable JComponent createCenterPanel() {
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setPreferredSize(new Dimension(350, 150));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel instructionLabel = new JLabel("<html><b>Enter your wallet password:</b></html>", SwingConstants.CENTER);
-        instructionLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        panel.add(instructionLabel, BorderLayout.NORTH);
+        JLabel usernameLabel = new JLabel("Enter your username:");
+        usernameField = new JTextField(20);
 
+        JLabel passwordLabel = new JLabel("Enter your password:");
         passwordField = new JPasswordField(20);
-        passwordField.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        passwordPanel.add(passwordField);
-        panel.add(passwordPanel, BorderLayout.CENTER);
+        loginButton = new JButton("Login");
+        styleLoginButton(loginButton);
+        loginButton.addActionListener(e -> onLogin());
 
-       JButton forgotPasswordButton = new JButton("Forgot Password?");
-        forgotPasswordButton.setFont(new Font("Arial", Font.PLAIN, 12));
-        forgotPasswordButton.setForeground(JBColor.namedColor("Button.foreground", JBColor.BLUE));
-        forgotPasswordButton.setContentAreaFilled(false);
-        forgotPasswordButton.setBorderPainted(false);
-        forgotPasswordButton.setFocusPainted(false);
-        forgotPasswordButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        forgotPasswordButton.addActionListener(e -> onForgotPassword());
+        gbc.gridx = 0; gbc.gridy = 0;
+        panel.add(usernameLabel, gbc);
+        gbc.gridy++;
+        panel.add(usernameField, gbc);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.add(forgotPasswordButton);
+        gbc.gridy++;
+        panel.add(passwordLabel, gbc);
+        gbc.gridy++;
+        panel.add(passwordField, gbc);
 
-        panel.add(buttonPanel, BorderLayout.SOUTH);
+        gbc.gridy++;
+        panel.add(loginButton, gbc);
+
         return panel;
     }
 
+    private void styleLoginButton(JButton button) {
+        button.setBackground(new Color(33, 150, 243)); // Blue
+        button.setForeground(Color.WHITE); // White text
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setFocusPainted(false);
+        button.setOpaque(true);
+        button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+    }
+
+    private void onLogin() {
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Both fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // ✅ Save credentials securely
+        SecureStorageUtil.storeCredential("wallet_username", username);
+        SecureStorageUtil.storeCredential("wallet_password", password);
+
+        // ✅ Show wallet page after successful login
+        close(OK_EXIT_CODE);
+        WalletActionsDialog walletActionsDialog = new WalletActionsDialog();
+        walletActionsDialog.show();
+    }
 
     @Override
-    protected void doOKAction() {
-        String enteredPassword = new String(passwordField.getPassword());
-        String storedPassword = SecureStorageUtil.retrieveCredential("wallet_password");
-
-        if (enteredPassword.equals(storedPassword)) {
-            close(OK_EXIT_CODE);
-            new WalletActionsDialog().show();
-        } else {
-            JOptionPane.showMessageDialog(null, "❌ Incorrect Password!", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void onForgotPassword() {
-        close(OK_EXIT_CODE);
-       WalletOptionsDialog walletOptionsDialog = new WalletOptionsDialog();
-       walletOptionsDialog.show();
-
-
+    protected Action @NotNull [] createActions() {
+        // ✅ Prevents default OK/Cancel from showing
+        return new Action[0];
     }
 }
+

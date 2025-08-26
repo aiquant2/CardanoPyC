@@ -1,3 +1,5 @@
+
+
 package org.intellij.sdk.language.wallet;
 
 import com.intellij.openapi.ui.DialogWrapper;
@@ -20,9 +22,9 @@ public class WalletOptionsDialog extends DialogWrapper {
     @Override
     protected JComponent createCenterPanel() {
         JPanel panel = new BackgroundImagePanel("/icons/background.jpg");
-        panel.setPreferredSize(new Dimension(350, 400)); // Adjusted size for a balanced layout
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Use BorderLayout for better positioning
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Consistent padding
+        panel.setPreferredSize(new Dimension(350, 450)); // increased height
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JLabel titleLabel = new JLabel("Wallet Management", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -32,42 +34,43 @@ public class WalletOptionsDialog extends DialogWrapper {
 
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        buttonPanel.setOpaque(false); // 2 rows, 1 column with spacing
+        buttonPanel.setOpaque(false);
 
         JButton createWalletButton = createStyledButton("Create Wallet");
         JButton restoreWalletButton = createStyledButton("Restore Wallet");
-        JButton ViewBalanceButton = createStyledButton("View Balance");
+        JButton viewBalanceButton = createStyledButton("View Balance");
+        JButton loginWalletButton = createStyledButton("Log into Existing Wallet"); // NEW BUTTON
 
         createWalletButton.addActionListener(e -> onCreateWallet());
         restoreWalletButton.addActionListener(e -> onRestoreWallet());
-        ViewBalanceButton.addActionListener(e -> onViewBalance());
+        viewBalanceButton.addActionListener(e -> onViewBalance());
+        loginWalletButton.addActionListener(e -> onLoginWallet()); // action
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = GridBagConstraints.RELATIVE;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 0, 5, 0); // Vertical space between buttons
+        gbc.insets = new Insets(5, 0, 5, 0);
 
         buttonPanel.add(createWalletButton, gbc);
-        buttonPanel.add(restoreWalletButton,gbc);
-        buttonPanel.add(ViewBalanceButton,gbc);
+        buttonPanel.add(restoreWalletButton, gbc);
+        buttonPanel.add(viewBalanceButton, gbc);
+        buttonPanel.add(loginWalletButton, gbc); // added button
 
         panel.add(buttonPanel);
-
 
         return panel;
     }
 
-
-
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
-        button.setPreferredSize(new Dimension(250, 45)); // Slightly larger buttons
+        button.setPreferredSize(new Dimension(250, 45));
         button.setFont(new Font("Arial", Font.BOLD, 14));
-        button.setBackground(JBColor.namedColor("Button.background", new Color(70, 130, 180))); // Stylish blue color
-        button.setForeground(JBColor.namedColor("Button.foreground", JBColor.WHITE)); // White text for contrast
+        button.setBackground(JBColor.namedColor("Button.background", new Color(70, 130, 180)));
+        button.setForeground(JBColor.namedColor("Button.foreground", JBColor.WHITE));
         button.setFocusPainted(false);
-        button.setOpaque(true); // Ensure background is visible
-        button.setContentAreaFilled(true); // Make sure the color fills the button
+        button.setOpaque(true);
+        button.setContentAreaFilled(true);
         button.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(JBColor.namedColor("Button.borderColor", new Color(93, 147, 201)), 2),
                 BorderFactory.createEmptyBorder(5, 15, 5, 15)
@@ -75,12 +78,12 @@ public class WalletOptionsDialog extends DialogWrapper {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setBackground(JBColor.namedColor("Button.hoverBackground", new Color(93, 147, 201))); // Lighter blue on hover
+                button.setBackground(JBColor.namedColor("Button.hoverBackground", new Color(93, 147, 201)));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setBackground(JBColor.namedColor("Button.background", new Color(70, 130, 180))); // Restore original color
+                button.setBackground(JBColor.namedColor("Button.background", new Color(70, 130, 180)));
             }
         });
         return button;
@@ -96,19 +99,23 @@ public class WalletOptionsDialog extends DialogWrapper {
         String network = WalletApiKeyState.getInstance().getNetwork();
         GenerateWalletDialog generateWalletDialog = new GenerateWalletDialog(network);
         generateWalletDialog.show();
-
-
     }
 
     private void onRestoreWallet() {
         close(OK_EXIT_CODE);
         WalletRestoreDialog restoreDialog = new WalletRestoreDialog();
         restoreDialog.show();
-
     }
+
     private void onViewBalance() {
         close(OK_EXIT_CODE);
         ViewBalanceDialog viewDialog = new ViewBalanceDialog();
         viewDialog.show();
+    }
+
+    private void onLoginWallet() {
+        close(OK_EXIT_CODE);
+        WalletLoginDialog loginDialog = new WalletLoginDialog();
+        loginDialog.show();
     }
 }

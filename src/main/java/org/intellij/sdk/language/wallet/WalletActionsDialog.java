@@ -147,6 +147,7 @@ public class WalletActionsDialog extends DialogWrapper {
                 SecureStorageUtil.removeCredential("wallet_address");
                 SecureStorageUtil.removeCredential("wallet_name");
                 SecureStorageUtil.removeCredential("wallet_password");
+                SecureStorageUtil.removeCredential("wallet_username");
             }
 
             @Override
