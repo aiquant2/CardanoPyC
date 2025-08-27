@@ -4,7 +4,7 @@
     <vendor>AIQUANT TECHNOLOGIES</vendor>
 
 
-    <idea-version since-build="243" until-build="243.*" />
+    <idea-version since-build="243" until-build="252.*" />
 
     <depends>com.intellij.modules.platform</depends>
 
