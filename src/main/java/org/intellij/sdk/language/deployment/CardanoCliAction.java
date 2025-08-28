@@ -139,10 +139,10 @@ public class CardanoCliAction extends AnAction {
         JButton runScriptInfoButton = new JButton("Utxo Info");
         runScriptInfoButton.addActionListener(e -> {
             JPanel panel = new JPanel(new GridLayout(0, 1));
-            JTextField addrField = new JTextField();
+            JTextField addrField = new JTextField(); // user enters script address
             JComboBox<String> networkComboBox = new JComboBox<>(new String[]{"preview", "preprod", "mainnet"});
 
-            panel.add(new JLabel("Enter the address file path:"));
+            panel.add(new JLabel("Enter the script address:"));
             panel.add(addrField);
             panel.add(new JLabel("Select Network:"));
             panel.add(networkComboBox);
@@ -151,21 +151,41 @@ public class CardanoCliAction extends AnAction {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result != JOptionPane.OK_OPTION) return;
 
-            String addr = addrField.getText().trim();
+            String address = addrField.getText().trim();
             String networkType = (String) networkComboBox.getSelectedItem();
             String networkFlag = getNetworkFlag(networkType);
 
-            if (networkFlag == null || addr.isEmpty()) {
+            if (networkFlag == null || address.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Address and network selection are required.",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            String predefinedCommand = "cardano-cli query utxo --address $(< " + addr + ") " + networkFlag;
+            // Try to get socket path from ENV first
+            String socketPath = System.getenv("CARDANO_NODE_SOCKET_PATH");
+
+            // If not set, ask user to provide it dynamically
+            if (socketPath == null || socketPath.isEmpty()) {
+                socketPath = JOptionPane.showInputDialog(null,
+                        "Enter path to node.socket file:",
+                        "");
+                if (socketPath == null || socketPath.isEmpty()) {
+                    consoleView.print("Error: CARDANO_NODE_SOCKET_PATH not set\n", ConsoleViewContentType.ERROR_OUTPUT);
+                    return;
+                }
+            }
+
+            // Final CLI command
+            String predefinedCommand = String.format(
+                    "cardano-cli query utxo --socket-path \"%s\" --address %s %s",
+                    socketPath, address, networkFlag
+            );
+
             sendPredefinedCommand(predefinedCommand, consoleView);
         });
         return runScriptInfoButton;
     }
+
 
     private String getNetworkFlag(String networkType) {
         if (networkType == null) return null;
@@ -181,7 +201,7 @@ public class CardanoCliAction extends AnAction {
         }
     }
 
-    // ✅ Updated method: build script address + wait for CLI process
+    
     private @NotNull JButton getJButton(ConsoleView consoleView) {
         JButton buildAddressButton = new JButton("Build Plutus Address");
 
