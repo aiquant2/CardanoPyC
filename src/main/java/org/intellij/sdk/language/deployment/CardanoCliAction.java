@@ -1,310 +1,349 @@
+//
+//package org.intellij.sdk.language.deployment;
+//
+//import com.intellij.notification.Notification;
+//import com.intellij.notification.NotificationType;
+//import com.intellij.notification.Notifications;
+//import com.intellij.openapi.actionSystem.AnAction;
+//import com.intellij.openapi.actionSystem.AnActionEvent;
+//import com.intellij.openapi.project.Project;
+//import org.jetbrains.annotations.NotNull;
+//
+//import javax.swing.*;
+//import java.awt.*;
+//import java.nio.file.Files;
+//import java.nio.file.Path;
+//import java.nio.file.Paths;
+//
+//public class CardanoCliAction extends AnAction {
+//
+//    @Override
+//    public void actionPerformed(@NotNull AnActionEvent e) {
+//        Project project = e.getProject();
+//        if (project == null) return;
+//
+//        // Create and show the build address button directly
+//        showBuildAddressDialog(project);
+//    }
+//
+//    private void showBuildAddressDialog(Project project) {
+//        // Input form
+//        JPanel panel = new JPanel(new GridLayout(0, 1));
+//        JTextField plutusFilePathField = new JTextField();
+//        JComboBox<String> networkComboBox = new JComboBox<>(new String[]{"preview", "preprod", "mainnet"});
+//
+//        panel.add(new JLabel("Enter the path to your Plutus script file (without extension):"));
+//        panel.add(plutusFilePathField);
+//        panel.add(new JLabel("Select Network:"));
+//        panel.add(networkComboBox);
+//
+//        int result = JOptionPane.showConfirmDialog(
+//                null, panel, "Plutus File Path and Network Input",
+//                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+//        );
+//
+//        if (result != JOptionPane.OK_OPTION) return;
+//
+//        String plutusFilePath = plutusFilePathField.getText().trim();
+//        String networkType = (String) networkComboBox.getSelectedItem();
+//        String networkFlag = getNetworkFlag(networkType);
+//
+//        if (networkFlag == null || plutusFilePath.isEmpty()) {
+//            showErrorNotification("Plutus file path and network selection are required.", project);
+//            return;
+//        }
+//
+//        // Run in background thread to avoid blocking UI
+//        new Thread(() -> buildPlutusAddress(plutusFilePath, networkFlag, project)).start();
+//    }
+//
+//    private void buildPlutusAddress(String plutusFilePath, String networkFlag, Project project) {
+//        try {
+//            // Ensure extensions
+//            String plutusFile = plutusFilePath.endsWith(".plutus") ? plutusFilePath : plutusFilePath + ".plutus";
+//            String addrFile = plutusFile.replace(".plutus", ".addr");
+//
+//            // Build & run process
+//            ProcessBuilder pb;
+//            if (networkFlag.contains(" ")) {
+//                String[] parts = networkFlag.split(" ");
+//                pb = new ProcessBuilder(
+//                        "cardano-cli", "address", "build",
+//                        "--payment-script-file", plutusFile,
+//                        parts[0], parts[1],
+//                        "--out-file", addrFile
+//                );
+//            } else {
+//                pb = new ProcessBuilder(
+//                        "cardano-cli", "address", "build",
+//                        "--payment-script-file", plutusFile,
+//                        networkFlag,
+//                        "--out-file", addrFile
+//                );
+//            }
+//
+//            pb.redirectErrorStream(true);
+//            Process process = pb.start();
+//
+//            // Wait until finished
+//            int exitCode = process.waitFor();
+//            if (exitCode == 0) {
+//                Path addrPath = Paths.get(addrFile);
+//                if (Files.exists(addrPath)) {
+//                    String scriptAddress = Files.readString(addrPath).trim();
+//                    // Show styled success notification
+//                    showSuccessNotificationWithFile(
+//                            "Plutus Address Generated Successfully!",
+//                            "Your script address:",
+//                            scriptAddress,
+//                            addrFile,
+//                            project
+//                    );
+//                } else {
+//                    showErrorNotification("Address file not found: " + addrFile, project);
+//                }
+//            } else {
+//                showErrorNotification("cardano-cli failed with exit code: " + exitCode, project);
+//            }
+//        } catch (Exception ex) {
+//            showErrorNotification("Error running cardano-cli: " + ex.getMessage(), project);
+//        }
+//    }
+//
+//    private String getNetworkFlag(String networkType) {
+//        if (networkType == null) return null;
+//        switch (networkType) {
+//            case "preview":
+//                return "--testnet-magic 2";
+//            case "preprod":
+//                return "--testnet-magic 1";
+//            case "mainnet":
+//                return "--mainnet";
+//            default:
+//                return null;
+//        }
+//    }
+//
+//    private void showSuccessNotificationWithFile(String title, String mainContent, String address, String filePath, Project project) {
+//        String message = "<html>" +
+//                "<head>" +
+//                "</head>" +
+//                "<body>" +
+//                "<div class='success'>" +
+//                "<div class='title'>✅ " + title + "</div>" +
+//                "<div class='content'>" + mainContent + "</div>" +
+//                "<div class='address'>" + address + "</div>" +
+//                "<div class='file-path'>📁 Saved to: " + filePath + "</div>" +
+//                "</div>" +
+//                "</body>" +
+//                "</html>";
+//
+//        Notification notification = com.intellij.notification.NotificationGroupManager.getInstance()
+//                .getNotificationGroup("Cardano CLI Notifications")
+//                .createNotification(message, NotificationType.INFORMATION);
+//        Notifications.Bus.notify(notification, project);
+//    }
+//
+//    private void showErrorNotification(String message, Project project) {
+//        String htmlMessage = "<html>" +
+//                "<head>" +
+//                "<style>" +
+//                ".error { color: #C62828; background-color: #FFEBEE; padding: 12px; border-left: 4px solid #C62828; border-radius: 4px; }" +
+//                ".title { font-weight: bold; font-size: 14px; margin-bottom: 8px; }" +
+//                ".content { margin: 6px 0; }" +
+//                "</style>" +
+//                "</head>" +
+//                "<body>" +
+//                "<div class='error'>" +
+//                "<div class='title'>❌ Error</div>" +
+//                "<div class='content'>" + message + "</div>" +
+//                "</div>" +
+//                "</body>" +
+//                "</html>";
+//
+//        Notification notification = com.intellij.notification.NotificationGroupManager.getInstance()
+//                .getNotificationGroup("Cardano CLI Notifications")
+//                .createNotification(htmlMessage, NotificationType.ERROR);
+//        Notifications.Bus.notify(notification, project);
+//    }
+//
+//    @Override
+//    public void update(@NotNull AnActionEvent e) {
+//        e.getPresentation().setEnabledAndVisible(e.getProject() != null);
+//    }
+//}
 
 package org.intellij.sdk.language.deployment;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.openapi.wm.RegisterToolWindowTask;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.ui.ConsoleView;
-import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.openapi.util.Disposer;
-import com.intellij.ui.components.JBPanel;
-import com.intellij.ui.components.JBTextField;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class CardanoCliAction extends AnAction {
-    private OSProcessHandler processHandler;
-    private BufferedWriter processInput;
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         Project project = e.getProject();
         if (project == null) return;
 
-        // Prompt user for CARDANO_NODE_SOCKET_PATH
-        String socketPath = promptForSocketPath();
-        if (socketPath == null) return; // User cancelled
-
-        // Initialize bash process
-        try {
-            GeneralCommandLine commandLine = new GeneralCommandLine("bash");
-            commandLine.withWorkDirectory(project.getBasePath());
-
-            processHandler = new OSProcessHandler(commandLine);
-            processInput = new BufferedWriter(new OutputStreamWriter(processHandler.getProcessInput()));
-        } catch (ExecutionException ex) {
-            JOptionPane.showMessageDialog(null, "Failed to start process: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        // First check dependencies
+        if (!isCardanoInstalled("cardano-node") || !isCardanoInstalled("cardano-cli")) {
+            showErrorNotification("⚠️ Cardano is not installed. Please install `cardano-node` and `cardano-cli` before generating addresses.", project);
             return;
         }
 
-        // Create or get tool window
-        ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Cardano CLI Terminal");
-        if (toolWindow == null) {
-            toolWindow = ToolWindowManager.getInstance(project).registerToolWindow(
-                    new RegisterToolWindowTask(
-                            "Cardano CLI Terminal",
-                            ToolWindowAnchor.BOTTOM,
-                            null,
-                            false,
-                            true,
-                            true,
-                            true,
-                            null,
-                            null,
-                            null
-                    )
-            );
+        // Proceed with build address UI
+        showBuildAddressDialog(project);
+    }
+
+    private void showBuildAddressDialog(Project project) {
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        JTextField plutusFilePathField = new JTextField();
+        JComboBox<String> networkComboBox = new JComboBox<>(new String[]{"preview", "preprod", "mainnet"});
+
+        panel.add(new JLabel("Enter the path to your Plutus script file (without extension):"));
+        panel.add(plutusFilePathField);
+        panel.add(new JLabel("Select Network:"));
+        panel.add(networkComboBox);
+
+        int result = JOptionPane.showConfirmDialog(
+                null, panel, "Plutus File Path and Network Input",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (result != JOptionPane.OK_OPTION) return;
+
+        String plutusFilePath = plutusFilePathField.getText().trim();
+        String networkType = (String) networkComboBox.getSelectedItem();
+        String networkFlag = getNetworkFlag(networkType);
+
+        if (networkFlag == null || plutusFilePath.isEmpty()) {
+            showErrorNotification("Plutus file path and network selection are required.", project);
+            return;
         }
 
-        // Create console view and content
-        ConsoleView consoleView = new ConsoleViewImpl(project, true);
-        JBPanel<?> terminalPanel = createTerminalPanel(consoleView);
-
-        Content content = ContentFactory.getInstance().createContent(
-                terminalPanel,
-                "Cardano CLI Terminal",
-                false
-        );
-        toolWindow.getContentManager().addContent(content);
-        Disposer.register(content, consoleView);
-
-        // Attach process to console
-        consoleView.clear();
-        consoleView.attachToProcess(processHandler);
-        processHandler.startNotify();
-
-        // Show tool window
-        toolWindow.show(() -> {});
+        new Thread(() -> buildPlutusAddress(plutusFilePath, networkFlag, project)).start();
     }
 
-    private String promptForSocketPath() {
-        String socketPath;
-        int result;
-        do {
-            JBPanel<?> panel = new JBPanel<>(new GridLayout(0, 1));
-            JBTextField nodeSocket = new JBTextField();
-            panel.add(new JLabel("Node socket filepath:"));
-            panel.add(nodeSocket);
+    private void buildPlutusAddress(String plutusFilePath, String networkFlag, Project project) {
+        try {
+            String plutusFile = plutusFilePath.endsWith(".plutus") ? plutusFilePath : plutusFilePath + ".plutus";
+            String addrFile = plutusFile.replace(".plutus", ".addr");
 
-            result = JOptionPane.showConfirmDialog(null, panel, "Socket Path Input",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            socketPath = nodeSocket.getText().trim();
-
-            if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.CLOSED_OPTION) {
-                return null;
+            ProcessBuilder pb;
+            if (networkFlag.contains(" ")) {
+                String[] parts = networkFlag.split(" ");
+                pb = new ProcessBuilder(
+                        "cardano-cli", "address", "build",
+                        "--payment-script-file", plutusFile,
+                        parts[0], parts[1],
+                        "--out-file", addrFile
+                );
+            } else {
+                pb = new ProcessBuilder(
+                        "cardano-cli", "address", "build",
+                        "--payment-script-file", plutusFile,
+                        networkFlag,
+                        "--out-file", addrFile
+                );
             }
 
-            if (socketPath.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Socket path is required.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } while (socketPath.isEmpty());
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
 
-        return socketPath;
-    }
-
-    private JBPanel<?> createTerminalPanel(ConsoleView consoleView) {
-        JBPanel<?> terminalPanel = new JBPanel<>(new BorderLayout());
-        terminalPanel.add(consoleView.getComponent(), BorderLayout.CENTER);
-
-        JBTextField inputField = new JBTextField();
-        inputField.addActionListener(event -> sendCommand(inputField, consoleView));
-        terminalPanel.add(inputField, BorderLayout.SOUTH);
-
-        JBPanel<?> buttonPanel = new JBPanel<>(new FlowLayout());
-        buttonPanel.add(getButton(consoleView));   // UTxO Info button
-        buttonPanel.add(getJButton(consoleView));  // Build Address button
-        terminalPanel.add(buttonPanel, BorderLayout.NORTH);
-
-        return terminalPanel;
-    }
-
-    private @NotNull JButton getButton(ConsoleView consoleView) {
-        JButton runScriptInfoButton = new JButton("Utxo Info");
-        runScriptInfoButton.addActionListener(e -> {
-            JPanel panel = new JPanel(new GridLayout(0, 1));
-            JTextField addrField = new JTextField(); // user enters script address
-            JComboBox<String> networkComboBox = new JComboBox<>(new String[]{"preview", "preprod", "mainnet"});
-
-            panel.add(new JLabel("Enter the script address:"));
-            panel.add(addrField);
-            panel.add(new JLabel("Select Network:"));
-            panel.add(networkComboBox);
-
-            int result = JOptionPane.showConfirmDialog(null, panel, "Address and Network Input",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            if (result != JOptionPane.OK_OPTION) return;
-
-            String address = addrField.getText().trim();
-            String networkType = (String) networkComboBox.getSelectedItem();
-            String networkFlag = getNetworkFlag(networkType);
-
-            if (networkFlag == null || address.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Address and network selection are required.",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Try to get socket path from ENV first
-            String socketPath = System.getenv("CARDANO_NODE_SOCKET_PATH");
-
-            // If not set, ask user to provide it dynamically
-            if (socketPath == null || socketPath.isEmpty()) {
-                socketPath = JOptionPane.showInputDialog(null,
-                        "Enter path to node.socket file:",
-                        "");
-                if (socketPath == null || socketPath.isEmpty()) {
-                    consoleView.print("Error: CARDANO_NODE_SOCKET_PATH not set\n", ConsoleViewContentType.ERROR_OUTPUT);
-                    return;
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                Path addrPath = Paths.get(addrFile);
+                if (Files.exists(addrPath)) {
+                    String scriptAddress = Files.readString(addrPath).trim();
+                    showSuccessNotificationWithFile(
+                            "Plutus Address Generated Successfully!",
+                            "Your script address:",
+                            scriptAddress,
+                            addrFile,
+                            project
+                    );
+                } else {
+                    showErrorNotification("Address file not found: " + addrFile, project);
                 }
+            } else {
+                showErrorNotification("cardano-cli failed with exit code: " + exitCode, project);
             }
-
-            // Final CLI command
-            String predefinedCommand = String.format(
-                    "cardano-cli query utxo --socket-path \"%s\" --address %s %s",
-                    socketPath, address, networkFlag
-            );
-
-            sendPredefinedCommand(predefinedCommand, consoleView);
-        });
-        return runScriptInfoButton;
+        } catch (Exception ex) {
+            showErrorNotification("Error running cardano-cli: " + ex.getMessage(), project);
+        }
     }
-
 
     private String getNetworkFlag(String networkType) {
         if (networkType == null) return null;
         switch (networkType) {
-            case "preview":
-                return "--testnet-magic 2";
-            case "preprod":
-                return "--testnet-magic 1";
-            case "mainnet":
-                return "--mainnet";
-            default:
-                return null;
+            case "preview": return "--testnet-magic 2";
+            case "preprod": return "--testnet-magic 1";
+            case "mainnet": return "--mainnet";
+            default: return null;
         }
     }
 
-    
-    private @NotNull JButton getJButton(ConsoleView consoleView) {
-        JButton buildAddressButton = new JButton("Build Plutus Address");
-
-        buildAddressButton.addActionListener(e -> {
-            // Input form
-            JPanel panel = new JPanel(new GridLayout(0, 1));
-            JBTextField plutusFilePathField = new JBTextField();
-            JComboBox<String> networkComboBox = new JComboBox<>(new String[]{"preview", "preprod", "mainnet"});
-
-            panel.add(new JLabel("Enter the path to your Plutus script file (without extension):"));
-            panel.add(plutusFilePathField);
-            panel.add(new JLabel("Select Network:"));
-            panel.add(networkComboBox);
-
-            int result = JOptionPane.showConfirmDialog(
-                    null, panel, "Plutus File Path and Network Input",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
-            );
-
-            if (result != JOptionPane.OK_OPTION) return;
-
-            String plutusFilePath = plutusFilePathField.getText().trim();
-            String networkType = (String) networkComboBox.getSelectedItem();
-            String networkFlag = getNetworkFlag(networkType);
-
-            if (networkFlag == null || plutusFilePath.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Plutus file path and network selection are required.",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Ensure extensions
-            String plutusFile = plutusFilePath.endsWith(".plutus") ? plutusFilePath : plutusFilePath + ".plutus";
-            String addrFile = plutusFile.replace(".plutus", ".addr");
-
-            try {
-                // Build & run process
-
-                ProcessBuilder pb;
-                if (networkFlag.contains(" ")) {
-                    String[] parts = networkFlag.split(" ");
-                    pb = new ProcessBuilder(
-                            "cardano-cli", "address", "build",
-                            "--payment-script-file", plutusFile,
-                            parts[0], parts[1],
-                            "--out-file", addrFile
-                    );
-                } else {
-                    pb = new ProcessBuilder(
-                            "cardano-cli", "address", "build",
-                            "--payment-script-file", plutusFile,
-                            networkFlag,
-                            "--out-file", addrFile
-                    );
-                }
-
-
-                pb.redirectErrorStream(true);
-                Process process = pb.start();
-
-                // Wait until finished
-                int exitCode = process.waitFor();
-                if (exitCode == 0) {
-                    Path addrPath = Paths.get(addrFile);
-                    if (Files.exists(addrPath)) {
-                        String scriptAddress = Files.readString(addrPath).trim();
-                        consoleView.print("\nGenerated Script Address:\n" + scriptAddress + "\n",
-                                ConsoleViewContentType.NORMAL_OUTPUT);
-                    } else {
-                        consoleView.print("\n[Error] Address file not found: " + addrFile + "\n",
-                                ConsoleViewContentType.ERROR_OUTPUT);
-                    }
-                } else {
-                    consoleView.print("\n[Error] cardano-cli failed with exit code: " + exitCode + "\n",
-                            ConsoleViewContentType.ERROR_OUTPUT);
-                }
-            } catch (Exception ex) {
-                consoleView.print("Error running cardano-cli: " + ex.getMessage() + "\n",
-                        ConsoleViewContentType.ERROR_OUTPUT);
-            }
-        });
-
-        return buildAddressButton;
-    }
-
-    private void sendCommand(JBTextField inputField, ConsoleView consoleView) {
-        String userInput = inputField.getText();
-        inputField.setText(""); // Clear input field after enter
-        sendPredefinedCommand(userInput, consoleView);
-    }
-
-    private void sendPredefinedCommand(String predefinedCommand, ConsoleView consoleView) {
-        if (processInput == null) {
-            consoleView.print("Process input is not initialized\n", ConsoleViewContentType.ERROR_OUTPUT);
-            return;
-        }
+    private boolean isCardanoInstalled(String command) {
         try {
-            consoleView.print(predefinedCommand + "\n", ConsoleViewContentType.USER_INPUT);
-            processInput.write(predefinedCommand + "\n");
-            processInput.flush();
-        } catch (Exception ex) {
-            consoleView.print("Error: " + ex.getMessage() + "\n", ConsoleViewContentType.ERROR_OUTPUT);
-        }
+            ProcessBuilder pb = new ProcessBuilder(command, "--version");
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                    String version = reader.readLine();
+                    return version != null && !version.isEmpty();
+                }
+            }
+        } catch (Exception ignored) {}
+        return false;
+    }
+
+    private void showSuccessNotificationWithFile(String title, String mainContent, String address, String filePath, Project project) {
+        String message = "<html>" +
+                "<body>" +
+                "<div style='padding:8px;'>" +
+                "<div style='font-weight:bold;color:#2E7D32;'>✅ " + title + "</div>" +
+                "<div>" + mainContent + "</div>" +
+                "<div style='margin:6px 0; font-family:monospace;'>" + address + "</div>" +
+                "<div>📁 Saved to: " + filePath + "</div>" +
+                "</div>" +
+                "</body>" +
+                "</html>";
+
+        Notification notification = com.intellij.notification.NotificationGroupManager.getInstance()
+                .getNotificationGroup("Cardano CLI Notifications")
+                .createNotification(message, NotificationType.INFORMATION);
+        Notifications.Bus.notify(notification, project);
+    }
+
+    private void showErrorNotification(String message, Project project) {
+        String htmlMessage = "<html>" +
+                "<body>" +
+                "<div style='color:#C62828;background:#FFEBEE;padding:10px;border-left:4px solid #C62828;border-radius:4px;'>" +
+                "<div style='font-weight:bold;'>❌ Error</div>" +
+                "<div>" + message + "</div>" +
+                "</div>" +
+                "</body>" +
+                "</html>";
+
+        Notification notification = com.intellij.notification.NotificationGroupManager.getInstance()
+                .getNotificationGroup("Cardano CLI Notifications")
+                .createNotification(htmlMessage, NotificationType.ERROR);
+        Notifications.Bus.notify(notification, project);
     }
 
     @Override
