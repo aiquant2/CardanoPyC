@@ -1,16 +1,18 @@
 # CardanoPyC Pycharm  Plugin
+![Version](https://img.shields.io/jetbrains/plugin/v/aiquant.plugins)
+![Downloads](https://img.shields.io/jetbrains/plugin/d/aiquant.plugins)
+![Rating](https://img.shields.io/jetbrains/plugin/r/stars/aiquant.plugins)
 
+
+![IntelliJ Platform Plugin Template][file:intellij-platform-plugin-template-dark]
+![CardanoPyC Plugin][file:intellij-platform-plugin-template-light]
 
 [![official JetBrains project](https://jb.gg/badges/official.svg)][jb:github]
 [![Twitter Follow](https://img.shields.io/badge/follow-%40JBPlatform-1DA1F2?logo=twitter)](https://twitter.com/JBPlatform)
 [![Build](https://github.com/JetBrains/intellij-platform-plugin-template/workflows/Build/badge.svg)][gh:build]
 [![Slack](https://img.shields.io/badge/Slack-%23intellij--platform-blue?style=flat-square&logo=Slack)](https://plugins.jetbrains.com/slack)
 
-![IntelliJ Platform Plugin Template][file:intellij-platform-plugin-template-dark]
-![CardanoPyC Plugin][file:intellij-platform-plugin-template-light]
-
 ---
-
 <!-- Plugin description -->
 CardanoPyC is a powerful IntelliJ-based plugin that provides seamless support for Haskell and Plutus development with deep integration to the Cardano blockchain. It enhances developer productivity by offering:
 
