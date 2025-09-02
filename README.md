@@ -36,9 +36,9 @@ This plugin is perfect for developers building on the Cardano blockchain, enabli
 - Intelligent code completion
 - Custom parser definition for Haskell syntax
 
-![Syntax_highlighting](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/kunal/images/syntax_highlighting.png)
+![Syntax_highlighting](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/main/images/syntax_highlighting.png)
 
-![Code_completion](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/kunal/images/code_completion.png)
+![Code_completion](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/main/images/code_completion.png)
 
 ## 🔗 Cardano API Integration (Run Menu > CardanoAPI)
 - **Blockchain Data**: Latest block details, network state, protocol parameters
@@ -48,9 +48,9 @@ This plugin is perfect for developers building on the Cardano blockchain, enabli
 - **Assets & Policies**: Asset details, policy information, assets by address
 - **Stake Keys**: Address associations with stake keys
 
-![Cardano API UI](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/kunal/images/cardano_api.png)
+![Cardano API UI](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/main/images/cardano_api.png)
 
-![API Data UI](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/kunal/images/api_data.png)
+![API Data UI](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/main/images/api_data.png)
 
 
 ## 💼 Wallet Management
@@ -75,9 +75,9 @@ This plugin is perfect for developers building on the Cardano blockchain, enabli
     - **Export Address** → Copies wallet address for transactions or deployment.
 
 
-![Wallet_image](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/kunal/images/wallet.png)
+![Wallet_image](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/main/images/wallet.png)
 
-![Wallet Management Demo](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/kunal/images/wallet_management.gif)
+![Wallet Management Demo](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/main/images/wallet_management.gif)
 
 
 ## Deployment Tools
@@ -102,7 +102,7 @@ The plugin provides an easy way to generate Cardano addresses from your Plutus s
 
 ---
 
-![Deployment](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/kunal/images/generate_address.gif)
+![Deployment](https://raw.githubusercontent.com/aiquant2/CardanoPyC/refs/heads/main/images/generate_address.gif)
 
 
 ## 📋 Prerequisites
