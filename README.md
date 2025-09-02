@@ -34,6 +34,10 @@ This plugin is perfect for developers building on the Cardano blockchain, enabli
 - Intelligent code completion
 - Custom parser definition for Haskell syntax
 
+![Wallet UI](images/syntax_highlighting.png)
+
+![Wallet UI](images/code_completion.png)
+
 ## 🔗 Cardano API Integration (Run Menu > CardanoAPI)
 - **Blockchain Data**: Latest block details, network state, protocol parameters
 - **Address & Transactions**: Address balances, transaction details, transaction lists by address
@@ -41,6 +45,11 @@ This plugin is perfect for developers building on the Cardano blockchain, enabli
 - **Governance**: Committee members, DRep information, governance actions
 - **Assets & Policies**: Asset details, policy information, assets by address
 - **Stake Keys**: Address associations with stake keys
+
+![Cardano API UI](images/cardano_api.png)
+
+![API Data UI](images/api_data.png)
+
 
 ## 💼 Wallet Management
 
@@ -62,6 +71,12 @@ This plugin is perfect for developers building on the Cardano blockchain, enabli
     - **Import Wallet** → Paste your mnemonic/private key to load an existing wallet.
     - **View Balance** → Fetches live balance from the connected Cardano node.
     - **Export Address** → Copies wallet address for transactions or deployment.
+
+
+![Wallet UI](images/wallet.png)
+
+![Wallet Management Demo](images/wallet_management.gif)
+
 
 ## Deployment Tools
 
@@ -85,37 +100,14 @@ The plugin provides an easy way to generate Cardano addresses from your Plutus s
 
 ---
 
-#### 🔹 Run Local Cardano Node
-Run a Cardano node directly within your IntelliJ IDE:
+![Wallet UI](images/generate_address.gif)
 
-- **🎯 Start the Node**:  
-  Run Menu `ctrl + shift + a`> Deployment > Run CardanoNode Locally
 
-- **📋 Fill in Required Parameters**:
-    - Topology File Path → `topology.json`
-    - Database Path → node database directory
-    - Socket Path → node socket file path
-    - Port → default `3001`
-    - Config File Path → `config.json`
 
-- **📊 Monitor Node Operation**:
-    - A dedicated tool window *Cardano Node Terminal* opens at the bottom
-    - View real-time node logs & status (Running/Stopped)
-    - Use **Stop** button to gracefully shutdown
-
-👉 Example config:
-```bash
-Topology File: /cardano/node/topology.json
-Database Path: /cardano/node/db/
-Socket Path: /cardano/node/socket/node.socket
-Port: 3001
-Config File: /cardano/node/config.json
-````
 ## 📋 Prerequisites
 
 - For generating addresses → cardano-node & cardano-cli must be installed (but node doesn’t need to be running).
 
-- For running node locally → cardano-node must be installed.
 
 ## Development Environment
 
@@ -127,6 +119,7 @@ Config File: /cardano/node/config.json
 ## 🏗️ Project Structure
 ```
 CardanoPyC/
+├── images/
 ├── src/
 │   ├── main/
 │   │   ├── java/
@@ -138,7 +131,7 @@ CardanoPyC/
 │   │   │       │   └── CardanoScanFetcher.java
 │   │   │       ├── deployment/              # Node deployment utilities
 │   │   │       │   ├─CardanoCliAction
-│   │   │       │   └── RunCardanoNodeActio
+│   │   │       │   
 │   │   │       ├── grammars/                # Language grammar definitions
 │   │   │       ├── highlighter/             # Syntax highlighting
 │   │   │       ├── icons/                   # Plugin icons
