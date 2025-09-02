@@ -177,3 +177,7 @@ intellijPlatformTesting {
     }
 }
 
+
+tasks.buildSearchableOptions {
+    enabled = false
+}

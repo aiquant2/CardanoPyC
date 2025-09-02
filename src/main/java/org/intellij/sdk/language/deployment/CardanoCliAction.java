@@ -331,14 +331,7 @@ public class CardanoCliAction extends AnAction {
     }
 
     private void showErrorNotification(String message, Project project) {
-        String htmlMessage = "<html>" +
-                "<body>" +
-                "<div style='color:#C62828;background:#FFEBEE;padding:10px;border-left:4px solid #C62828;border-radius:4px;'>" +
-                "<div style='font-weight:bold;'>❌ Error</div>" +
-                "<div>" + message + "</div>" +
-                "</div>" +
-                "</body>" +
-                "</html>";
+        String htmlMessage = message;
 
         Notification notification = com.intellij.notification.NotificationGroupManager.getInstance()
                 .getNotificationGroup("Cardano CLI Notifications")
