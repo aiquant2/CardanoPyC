@@ -11,9 +11,9 @@ import java.awt.*;
 
 public class WalletLoginDialog extends DialogWrapper {
 
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JButton loginButton;
+    protected JTextField usernameField;
+    protected JPasswordField passwordField;
+    protected JButton loginButton;
 
     public WalletLoginDialog() {
         super(true);

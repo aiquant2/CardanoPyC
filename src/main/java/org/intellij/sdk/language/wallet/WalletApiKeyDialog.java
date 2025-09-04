@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class WalletApiKeyDialog extends DialogWrapper {
-    private JTextField apiKeyField;
+    JTextField apiKeyField;
     private boolean canceled = false;
 
     public WalletApiKeyDialog() {

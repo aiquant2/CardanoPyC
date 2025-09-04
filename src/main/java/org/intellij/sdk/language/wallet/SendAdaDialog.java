@@ -29,8 +29,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SendAdaDialog extends DialogWrapper {
-    private JTextField recipientField;
-    private JTextField amountField;
+    protected JTextField recipientField;
+    protected JTextField amountField;
 
     public SendAdaDialog() {
         super(true);

@@ -112,7 +112,7 @@ public class CardanoCliAction extends AnAction {
         }
     }
 
-    private String getNetworkFlag(String networkType) {
+    String getNetworkFlag(String networkType) {
         if (networkType == null) return null;
         switch (networkType) {
             case "preview": return "--testnet-magic 2";
@@ -122,7 +122,7 @@ public class CardanoCliAction extends AnAction {
         }
     }
 
-    private boolean isCardanoInstalled(String command) {
+    boolean isCardanoInstalled(String command) {
         try {
             ProcessBuilder pb = new ProcessBuilder(command, "--version");
             pb.redirectErrorStream(true);
@@ -156,7 +156,7 @@ public class CardanoCliAction extends AnAction {
         Notifications.Bus.notify(notification, project);
     }
 
-    private void showErrorNotification(String message, Project project) {
+    void showErrorNotification(String message, Project project) {
         String htmlMessage = message;
 
         Notification notification = com.intellij.notification.NotificationGroupManager.getInstance()
