@@ -52,6 +52,7 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation("com.bloxbean.cardano:cardano-client-lib:0.6.3")
     implementation("com.bloxbean.cardano:cardano-client-backend:0.6.3")
+    testImplementation("junit:junit:4.13.2")
     implementation("com.bloxbean.cardano:cardano-client-backend-blockfrost:0.6.3")
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
