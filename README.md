@@ -28,6 +28,24 @@ This plugin is perfect for developers building on the Cardano blockchain, enabli
 
 ---
 
+## 📥 Installation
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/AIQUANT-Tech/CardanoPyC
+   cd CardanoPyC
+   
+2. Debug the extension by clicking the Intellij IDE debug icon.
+
+## 🏗️ Development
+
+### ✅ Running Tests
+
+Create a .env file in working directory and put your API key from Blockfrost\
+BLOCKFROST_API_KEY=pre*******(Enter your api key here)
+
+![Run Test](images/RunTest.png)
+
 # 🚀 Features
 
 ## 🎯 Haskell Language Support

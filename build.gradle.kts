@@ -54,6 +54,7 @@ dependencies {
     implementation("com.bloxbean.cardano:cardano-client-backend:0.6.3")
     testImplementation("junit:junit:4.13.2")
     implementation("com.bloxbean.cardano:cardano-client-backend-blockfrost:0.6.3")
+    testImplementation("io.github.cdimascio:dotenv-java:3.0.0")
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
         pycharmCommunity("2024.3")
