@@ -13,8 +13,6 @@ plugins {
 
 }
 
-
-
 group = providers.gradleProperty("pluginGroup").get()
 version = providers.gradleProperty("pluginVersion").get()
 
@@ -45,8 +43,7 @@ repositories {
 // Dependencies are managed with Gradle version catalog - read more: https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
 dependencies {
     testImplementation(libs.junit)
-//    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2") // Use a suitable JUnit 5 version
-//    testImplementation("org.opentest4j:opentest4j:1.2.0") // Explicitly include opentest4j
+
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("org.jetbrains:annotations:26.0.1")
     implementation ("com.google.code.gson:gson:2.10.1")
@@ -54,7 +51,6 @@ dependencies {
     implementation("com.bloxbean.cardano:cardano-client-backend:0.6.3")
     testImplementation("junit:junit:4.13.2")
     implementation("com.bloxbean.cardano:cardano-client-backend-blockfrost:0.6.3")
-    testImplementation("io.github.cdimascio:dotenv-java:3.0.0")
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
         pycharmCommunity("2024.3")
