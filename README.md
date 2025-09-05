@@ -41,9 +41,6 @@ This plugin is perfect for developers building on the Cardano blockchain, enabli
 
 ### ✅ Running Tests
 
-Create a .env file in working directory and put your API key from Blockfrost\
-BLOCKFROST_API_KEY=pre*******(Enter your api key here)
-
 ![Run Test](images/RunTest.png)
 
 # 🚀 Features
